@@ -92,3 +92,5 @@ def serve_index():
     return FileResponse("frontend/index.html", media_type="text/html")
 
 app.mount("/frontend", StaticFiles(directory='frontend'), name="frontend")
+
+
