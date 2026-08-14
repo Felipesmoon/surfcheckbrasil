@@ -92,15 +92,3 @@ def serve_index():
     return FileResponse("frontend/index.html", media_type="text/html")
 
 app.mount("/frontend", StaticFiles(directory='frontend'), name="frontend")
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(
-        "main:app",
-        host="0.0.0.0",
-        port=5001,  # Porta padrão para HTTPS
-        reload=False,
-        workers=1,
-        loop="asyncio",
-        log_level="debug",
-    )
