@@ -86,10 +86,10 @@ async def websocket_endpoint(websocket: WebSocket):
     
 @app.get("/")
 def serve_index():
-    if not os.path.exists("frontend/index.html"):
+    if not os.path.exists("/frontend/index.html"):
         logger.error(f"Erro crítico: arquivo index.html não existe em frontend/index.html")
         return JSONResponse(status_code=404, content={"detail": "Frontend index.html missing"})
-    return FileResponse("frontend/index.html", media_type="text/html")
+    return FileResponse("/frontend/index.html", media_type="text/html")
 
 app.mount("/frontend", StaticFiles(directory='frontend'), name="frontend")
 
