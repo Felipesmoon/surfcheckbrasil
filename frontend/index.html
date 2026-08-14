@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surf Check Brasil</title>
+  <meta name="description"
+    content="Dashboard de monitoramento de vento em tempo real para surf check.">
+  <link rel="stylesheet" href="frontend/style.css">
+  <link rel="icon" type="image/x-icon" href="/frontend/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+
+  <div class="dashboard">
+    <!-- Header -->
+    <div class="header">
+      <h1>Surf Check Brasil</h1>
+      <div class="status-badge">
+        <span class="status-dot disconnected" id="statusDot"></span>
+        <span id="statusText">Desconectado</span>
+      </div>
+    </div>
+
+    <!-- Sensor picker -->
+    <div class="sensor-picker">
+      <label for="sensorSelect">Estação</label>
+      <select id="sensorSelect">
+        <option value="">Selecione uma estação...</option>
+      </select>
+    </div>
+
+    <!-- Wind Cards -->
+    <div class="cards">
+      <!-- Card Velocidade -->
+      <div class="card" id="speedCard">
+        <div class="card-title">Velocidade do vento</div>
+        <div class="gauge-container">
+          <canvas id="speedCanvas" width="400" height="400"></canvas>
+          <div class="value-overlay">
+            <div class="value-number" id="speedValue">0</div>
+            <div class="value-unit">km/h</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Direção -->
+      <div class="card" id="directionCard">
+        <div class="card-title">Direção do vento</div>
+        <div class="gauge-container">
+          <canvas id="directionCanvas" width="400" height="400"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      Dados em tempo real via WebSocket &bull; Atualização automática
+    </div>
+  </div>
+
+  <script src="/frontend/script.js"></script>
+</body>
+
+</html>

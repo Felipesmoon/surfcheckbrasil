@@ -1,0 +1,1111 @@
+/* ─── Design System ──────────────────────────────────────────────────────────
+   Aesthetic: Industrial Surveillance / Tactical Dark
+   Fonts: Space Grotesk (display) + Space Mono (data/mono)
+   Color story: Deep space navy dominant · Amber accent · Cool grey neutral
+   Anchor: Pulsing LIVE badge + scanline overlay on camera feed
+   ──────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Dominant — deep tactical navy */
+  --bg-base:      #080c14;
+  --bg-panel:     #0d1220;
+  --bg-glass:     rgba(13, 18, 32, 0.72);
+  --bg-card:      rgba(255, 255, 255, 0.035);
+
+  /* Accent — amber / surveillance orange */
+  --accent:       #e8a030;
+  --accent-dim:   rgba(232, 160, 48, 0.18);
+  --accent-glow:  rgba(232, 160, 48, 0.45);
+
+  /* Live green */
+  --live-green:   #3affa0;
+  --live-glow:    rgba(58, 255, 160, 0.4);
+
+  /* Danger red */
+  --danger:       #f05050;
+  --danger-glow:  rgba(240, 80, 80, 0.35);
+
+  /* Neutrals */
+  --text-primary: #dde3f0;
+  --text-muted:   #5a6580;
+  --text-dim:     #323b52;
+  --border:       rgba(255, 255, 255, 0.06);
+  --border-active:rgba(232, 160, 48, 0.3);
+
+  /* Spacing rhythm: base-8 */
+  --r-sm:  12px;
+  --r-md:  24px;
+  --r-lg:  40px;
+
+  /* Transitions */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  background: var(--bg-base);
+  background-image:
+    radial-gradient(ellipse 60% 40% at 20% 10%, rgba(232,160,48,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 80% 90%, rgba(58,255,160,0.03) 0%, transparent 60%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 32px 20px 48px;
+  color: var(--text-primary);
+}
+
+/* ─── Dashboard ─────────────────────────────────────────────────────────────── */
+.dashboard {
+  max-width: 1040px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ─── Header ─────────────────────────────────────────────────────────────────  */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.header h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  letter-spacing: -1px;
+  color: var(--text-primary);
+  /* asymmetric accent underline */
+  position: relative;
+}
+
+.header h1::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 40%;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 8px 18px;
+  border-radius: 40px;
+  font-size: 0.82rem;
+  font-family: 'Space Mono', monospace;
+  letter-spacing: 0.08em;
+  border: 1px solid var(--border);
+  text-transform: uppercase;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.status-dot.connected {
+  background: var(--live-green);
+  box-shadow: 0 0 10px var(--live-glow);
+  animation: pulse-green 2s ease-in-out infinite;
+}
+
+.status-dot.disconnected {
+  background: var(--danger);
+  box-shadow: 0 0 10px var(--danger-glow);
+}
+
+@keyframes pulse-green {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+/* ─── Wind Cards ─────────────────────────────────────────────────────────────  */
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 640px) {
+  .cards { grid-template-columns: 1fr; }
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: var(--r-lg);
+  padding: 24px 20px 28px;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: border-color 0.3s var(--ease), transform 0.3s var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232,160,48,0.25), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.card:hover {
+  border-color: var(--border-active);
+  transform: translateY(-3px);
+}
+
+.card:hover::before { opacity: 1; }
+
+.card-title {
+  font-size: 0.72rem;
+  font-family: 'Space Mono', monospace;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+.gauge-container {
+  position: relative;
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 1/1;
+  margin: 0 auto;
+}
+
+.gauge-container canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.value-overlay {
+  position: absolute;
+  bottom: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.value-number {
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: -1px;
+  line-height: 1;
+  font-family: 'Space Mono', monospace;
+  color: var(--text-primary);
+}
+
+.value-unit {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-family: 'Space Mono', monospace;
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+}
+
+.direction-value {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.8rem;
+  font-weight: 600;
+  font-family: 'Space Mono', monospace;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+.direction-value small {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+/* ─── Camera Section ─────────────────────────────────────────────────────────  */
+.camera-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.03),
+    0 24px 64px -16px rgba(0, 0, 0, 0.8);
+  background: var(--bg-panel);
+  position: relative;
+}
+
+/* Subtle amber glow around camera block */
+.camera-section::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: var(--r-lg);
+  background: transparent;
+  border: 1px solid transparent;
+  background-clip: border-box;
+  pointer-events: none;
+  transition: border-color 0.4s;
+}
+
+.camera-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px;
+  background: rgba(0, 0, 0, 0.35);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.camera-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cam-icon {
+  color: var(--accent);
+  font-size: 1rem;
+  animation: rotate-cam 8s linear infinite;
+}
+
+@keyframes rotate-cam {
+  0%   { opacity: 1; }
+  49%  { opacity: 1; }
+  50%  { opacity: 0.3; }
+  99%  { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+.cam-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.cam-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Live badge */
+.live-badge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  padding: 4px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  transition: all 0.4s var(--ease);
+}
+
+.live-badge.online {
+  border-color: rgba(58, 255, 160, 0.35);
+  color: var(--live-green);
+  background: rgba(58, 255, 160, 0.06);
+}
+
+.live-badge.offline {
+  border-color: rgba(240, 80, 80, 0.35);
+  color: var(--danger);
+  background: rgba(240, 80, 80, 0.06);
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  flex-shrink: 0;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.live-dot.online {
+  background: var(--live-green);
+  box-shadow: 0 0 8px var(--live-glow);
+  animation: pulse-live 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% { transform: scale(1);   opacity: 1; }
+  50%       { transform: scale(1.4); opacity: 0.7; }
+}
+
+.cam-time {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+/* Fullscreen toggle button */
+.fullscreen-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+  flex-shrink: 0;
+}
+
+.fullscreen-btn:hover {
+  color: var(--accent);
+  border-color: var(--border-active);
+  background: var(--accent-dim);
+}
+
+.fullscreen-btn:active {
+  transform: scale(0.92);
+}
+
+.fullscreen-btn svg {
+  display: block;
+}
+
+/* Camera viewport in native fullscreen mode */
+.camera-viewport:fullscreen {
+  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+.camera-viewport:-webkit-full-screen {
+  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+.camera-viewport:fullscreen .camera-img,
+.camera-viewport:-webkit-full-screen .camera-img {
+  position: static;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* iOS Safari fallback: no real Fullscreen API for divs, so we simulate it */
+.camera-viewport.fs-fallback {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+.camera-viewport.fs-fallback .camera-img {
+  position: static;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+body.fs-lock {
+  overflow: hidden;
+}
+
+/* Texto do vento sobreposto ao vídeo — aparece apenas em tela cheia */
+.fullscreen-wind-overlay {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  z-index: 8;
+  display: none;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.52);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  color: #fff;
+  font-family: 'Space Mono', monospace;
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.fullscreen-wind-label {
+  color: var(--accent);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.fullscreen-wind-value {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.fullscreen-wind-direction {
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding-left: 12px;
+  border-left: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.camera-viewport:fullscreen .fullscreen-wind-overlay,
+.camera-viewport:-webkit-full-screen .fullscreen-wind-overlay,
+.camera-viewport.fs-fallback .fullscreen-wind-overlay {
+  display: flex;
+}
+
+/* Em tela cheia, somente vídeo + texto do vento ficam visíveis. */
+.camera-viewport:fullscreen .scanlines,
+.camera-viewport:-webkit-full-screen .scanlines,
+.camera-viewport.fs-fallback .scanlines {
+  display: none;
+}
+
+/* ─── Camera Viewport ─────────────────────────────────────────────────────── */
+.camera-viewport {
+  position: relative;
+  width: 100%;
+  min-height: 560px;
+  background: #050810;
+  overflow: hidden;
+}
+
+/* MJPEG feed — absolute fill, object-fit:contain keeps full frame visible */
+.camera-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  z-index: 1;
+}
+
+.camera-img[hidden] {
+  display: none;
+}
+
+.paywall-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  background: rgba(5, 8, 16, 0.92);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+}
+
+.paywall-overlay.visible {
+  display: flex;
+}
+
+.paywall-card {
+  width: min(460px, 100%);
+  border: 1px solid var(--border-active);
+  background: rgba(13, 18, 32, 0.9);
+  border-radius: 18px;
+  padding: 22px;
+  margin: 18px 0 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 16px 48px -14px rgba(0, 0, 0, 0.8);
+}
+
+.pix-preview {
+  min-height: 214px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.22);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.pix-preview.loading .pix-qr,
+.pix-preview.loading .pix-code,
+.pix-preview.loading .paywall-actions {
+  display: none;
+}
+
+.pix-spinner {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 3px solid rgba(232, 160, 48, 0.18);
+  border-top-color: var(--accent);
+  animation: pix-spin 0.9s linear infinite;
+}
+
+@keyframes pix-spin {
+  to { transform: rotate(360deg); }
+}
+
+.pix-preview-text {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-family: 'Space Mono', monospace;
+}
+
+.camera-viewport.paywall-open {
+  min-height: 0;
+  height: auto;
+  overflow: visible;
+  padding: 18px 24px 28px;
+}
+
+.camera-viewport.paywall-open .scanlines,
+.camera-viewport.paywall-open .cam-offline {
+  display: none;
+}
+
+.camera-viewport.paywall-open .paywall-overlay {
+  position: relative;
+  inset: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: transparent;
+  padding: 0;
+}
+
+.camera-viewport.paywall-open .camera-img {
+  display: none;
+}
+
+.paywall-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.paywall-sub {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.paywall-btn {
+  border: 1px solid var(--accent);
+  background: rgba(232, 160, 48, 0.16);
+  color: var(--text-primary);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.paywall-btn:hover {
+  background: rgba(232, 160, 48, 0.3);
+}
+
+.paywall-btn.secondary {
+  border-color: var(--border);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.paywall-btn.copied {
+  border-color: rgba(58, 255, 160, 0.7);
+  background: rgba(58, 255, 160, 0.18);
+  color: #dffff0;
+  box-shadow: 0 0 0 1px rgba(58, 255, 160, 0.2), 0 0 14px rgba(58, 255, 160, 0.22);
+}
+
+.paywall-btn.copied:hover {
+  background: rgba(58, 255, 160, 0.24);
+}
+
+.paywall-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.pix-qr {
+  width: 160px;
+  height: 160px;
+  align-self: center;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  padding: 6px;
+}
+
+.pix-code {
+  width: 100%;
+  min-height: 88px;
+  max-height: 120px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--text-primary);
+  padding: 10px;
+  resize: none;
+  font-size: 0.72rem;
+  font-family: 'Space Mono', monospace;
+}
+
+.paywall-status {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+/* Scanlines — the unforgettable anchor */
+.scanlines {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.08) 0px,
+    rgba(0, 0, 0, 0.08) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: multiply;
+}
+
+/* Camera offline overlay */
+.cam-offline {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(5, 8, 16, 0.92);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease);
+}
+
+.cam-offline.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.offline-icon {
+  font-size: 2.4rem;
+  color: var(--text-dim);
+  animation: hexflicker 3s ease-in-out infinite;
+}
+
+@keyframes hexflicker {
+  0%, 100% { opacity: 1; }
+  45%       { opacity: 1; }
+  50%       { opacity: 0.2; }
+  55%       { opacity: 1; }
+  85%       { opacity: 1; }
+  90%       { opacity: 0.4; }
+  95%       { opacity: 1; }
+}
+
+.offline-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+}
+
+.offline-sub {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+}
+
+/* HUD data strip */
+.cam-hud {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: linear-gradient(to top, rgba(5,8,16,0.92) 0%, transparent 100%);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+}
+
+.hud-sep {
+  color: var(--border);
+}
+
+.hud-item {
+  text-transform: uppercase;
+}
+
+/* ─── Footer ─────────────────────────────────────────────────────────────────  */
+.footer {
+  text-align: center;
+  font-size: 0.72rem;
+  font-family: 'Space Mono', monospace;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  padding-top: 4px;
+}
+
+.footer a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: var(--accent);
+}
+
+/* ─── Error card state ──────────────────────────────────────────────────────  */
+.card.error {
+  border-color: var(--danger);
+}
+
+/* ─── Responsive — Tablet (≤ 768px) ─────────────────────────────────────────  */
+@media (max-width: 768px) {
+  body {
+    padding: 20px 12px 36px;
+  }
+
+  .dashboard {
+    gap: 18px;
+  }
+
+  /* Camera header: stack label and meta on separate rows */
+  .camera-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 16px;
+    gap: 8px;
+  }
+
+  .cam-meta {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  /* Camera shorter on tablet */
+  .camera-viewport {
+    min-height: 520px;
+  }
+
+  .camera-viewport.paywall-open {
+    min-height: 0;
+    height: auto;
+    padding: 14px 16px 22px;
+  }
+
+  .paywall-overlay {
+    align-items: flex-start;
+    padding: 0;
+  }
+
+  .paywall-card {
+    width: min(460px, 100%);
+    max-height: none;
+    padding: 16px;
+    gap: 10px;
+    margin: 14px 0 18px;
+  }
+
+  .pix-qr {
+    width: 148px;
+    height: 148px;
+  }
+
+  /* Corner markers: tighter offset */
+  .corner.bl,
+  .corner.br {
+    bottom: 40px;
+  }
+
+  .card {
+    border-radius: 28px;
+    padding: 18px 16px 22px;
+  }
+}
+
+/* ─── Responsive — Mobile (≤ 480px) ─────────────────────────────────────────  */
+@media (max-width: 480px) {
+  body {
+    padding: 14px 10px 28px;
+  }
+
+  .dashboard {
+    gap: 14px;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .status-badge {
+    font-size: 0.72rem;
+    padding: 6px 14px;
+  }
+
+  /* Wind cards: always single column on phones */
+  .cards {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .camera-viewport {
+    min-height: 470px;
+  }
+
+  .camera-viewport.paywall-open {
+    min-height: 0;
+    height: auto;
+    padding: 12px 12px 18px;
+  }
+
+  .paywall-overlay {
+    padding: 0;
+  }
+
+  .paywall-card {
+    width: min(100%, 420px);
+    padding: 14px;
+    gap: 10px;
+    margin: 12px 0 16px;
+  }
+
+  .pix-preview {
+    min-height: 190px;
+    padding: 14px;
+  }
+
+  .pix-qr {
+    width: 132px;
+    height: 132px;
+  }
+
+  .card {
+    border-radius: 20px;
+    padding: 16px 14px 18px;
+  }
+
+  .gauge-container {
+    max-width: 220px;
+  }
+
+  .value-number {
+    font-size: 1.9rem;
+  }
+
+  .paywall-title {
+    font-size: 0.95rem;
+  }
+
+  .paywall-sub {
+    font-size: 0.78rem;
+  }
+
+  .paywall-btn {
+    padding: 9px 10px;
+    font-size: 0.68rem;
+  }
+
+  .paywall-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .pix-qr {
+    width: 132px;
+    height: 132px;
+  }
+
+  .pix-code {
+    min-height: 72px;
+    max-height: 92px;
+    font-size: 0.66rem;
+  }
+
+  /* Shrink corner markers on small screens */
+  .corner {
+    width: 14px;
+    height: 14px;
+  }
+
+  .corner.tl { top: 10px;  left: 10px;  }
+  .corner.tr { top: 10px;  right: 10px; }
+  .corner.bl { bottom: 36px; left: 10px;  }
+  .corner.br { bottom: 36px; right: 10px; }
+
+  /* HUD: hide the separator items to avoid overflow */
+  .hud-sep { display: none; }
+  .cam-hud {
+    gap: 8px;
+    font-size: 0.58rem;
+    flex-wrap: wrap;
+  }
+
+  /* Camera header: tighter */
+  .camera-header {
+    padding: 10px 12px;
+  }
+
+  .cam-title {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+  }
+
+  .cam-time {
+    font-size: 0.62rem;
+  }
+
+  .camera-section {
+    border-radius: 20px;
+  }
+}
+
+/* ─── Landscape phone (short viewport) ──────────────────────────────────────  */
+@media (max-height: 500px) and (orientation: landscape) {
+  body {
+    padding: 10px 16px 16px;
+    align-items: flex-start;
+  }
+
+  .dashboard {
+    gap: 12px;
+  }
+
+  .camera-viewport {
+    height: 200px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .gauge-container {
+    max-width: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fullscreen-wind-overlay {
+    bottom: 18px;
+    gap: 8px;
+    padding: 7px 11px;
+  }
+
+  .fullscreen-wind-label { font-size: 0.58rem; }
+  .fullscreen-wind-value { font-size: 0.82rem; }
+  .fullscreen-wind-direction { font-size: 0.8rem; padding-left: 8px; }
+}
+
+/* ─── Sensor picker (simplified dashboard) ────────────────────────────── */
+.sensor-picker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: var(--r-md);
+}
+
+.sensor-picker label {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.sensor-picker select {
+  flex: 1;
+  max-width: 360px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text-primary);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 14px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease);
+}
+
+.sensor-picker select:hover,
+.sensor-picker select:focus {
+  border-color: var(--border-active);
+  outline: none;
+}
